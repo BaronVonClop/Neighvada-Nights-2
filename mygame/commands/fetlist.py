@@ -18,6 +18,8 @@ class cmdFetlist(default_cmds.MuxCommand):
 	+fetlistaddy - Adds a kink to your "yes" category.
 	+fetlistaddm - Adds a kink to your "maybe" category.
 	+fetlistclear - Deletes all your kinks.
+	
+	By Applejack/Baron Von Clop.
 	"""
 
 	key = "+fetlist"
@@ -41,28 +43,35 @@ class cmdFetlist(default_cmds.MuxCommand):
 		maxlength = 50
 		x=1
 		while (x < maxlength):
-			
+			#if all three have an entry at fetlistn[x]
 			if len(target.db.fetlistf) >= x and len(target.db.fetlisty) >= x and len(target.db.fetlistm) >= x:
 				self.caller.msg('{:^20}'.format("%s" % (target.db.fetlistf[x-1])) + "$" + '{:^20}'.format("%s" % (target.db.fetlisty[x-1])) + "$" + '{:^20}'.format("%s" % (target.db.fetlistm[x-1])) + "$")
 				x += 1
+			#if only f and y have an entry at fetlistn[x]
 			elif len(target.db.fetlistf) >= x and len(target.db.fetlisty) >= x:
 				self.caller.msg('{:^20}'.format("%s" % (target.db.fetlistf[x-1])) + "$" + '{:^20}'.format("%s" % (target.db.fetlisty[x-1])) + "$" + '{:^20}'.format("") + "$")
 				x += 1
+			#if only y and m have an entry at fetlistn[x]
 			elif len(target.db.fetlisty) >= x and len(target.db.fetlistm) >= x:
 				self.caller.msg('{:^20}'.format("") + "$" + '{:^20}'.format("%s" % (target.db.fetlisty[x-1])) + "$" + '{:^20}'.format("%s" % (target.db.fetlistm[x-1])) + "$")
 				x += 1
+			#if only f and m have an entry at fetlistn[x]
 			elif len(target.db.fetlistf) >= x and len(target.db.fetlistm) >= x:
 				self.caller.msg('{:^20}'.format("%s" % (target.db.fetlistf[x-1])) + "$" + '{:^20}'.format("") + "$" + '{:^20}'.format("%s" % (target.db.fetlistm[x-1])) + "$")
 				x += 1
+			#if only m has an entry at fetlistn[x]
 			elif len(target.db.fetlistm) >= x:
 				self.caller.msg('{:^20}'.format("") + "$" + '{:^20}'.format("") + "$" + '{:^20}'.format("%s" % (target.db.fetlistm[x-1])) + "$")
 				x += 1
+			#if only y has an entry at fetlistn[x]
 			elif len(target.db.fetlisty) >= x:
 				self.caller.msg('{:^20}'.format("") + "$" + '{:^20}'.format("%s" % (target.db.fetlisty[x-1])) + "$" + '{:^20}'.format("") + "$")
 				x += 1
+			#if only f has an entry at fetlistn[x]
 			elif len(target.db.fetlistf) >= x:
 				self.caller.msg('{:^20}'.format("%s" % (target.db.fetlistf[x-1])) + "$" + '{:^20}'.format("") + "$" + '{:^20}'.format("") + "$")
 				x += 1
+			#catch to prevent infinite loop
 			else:
 				x +=1
 				
@@ -165,6 +174,8 @@ class cmdFetlistclear(default_cmds.MuxCommand):
 		
 		caller = self.caller
 		del caller.db.fetlistf[:]
+		del caller.db.fetlisty[:]
+		del caller.db.fetlistm[:]
 		caller.msg("Your kinks have been cleared.")
 		
 		

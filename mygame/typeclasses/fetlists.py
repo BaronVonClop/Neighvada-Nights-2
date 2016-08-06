@@ -1,4 +1,10 @@
 """
+!!!!! DEPRECIATED !!!!!
+
+This isn't necessary anymore. Kept just in case for now.
+
+
+
 Creation of a fetlist item. This hosts the tag dict for fetlist.
 
 @create/drop fetlist:fetlists.fetlist
