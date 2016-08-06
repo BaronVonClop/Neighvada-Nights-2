@@ -1,6 +1,9 @@
 """
 Fetlist. Serves as replacement for wixxx from ProtoMUCK.
 
+Much more flexible and includes categories, avoiding the dreaded "wixxxlump"
+where people just throw virtually everything on their list in no real order.
+
 """
 
 from evennia import Command as BaseCommand
@@ -13,11 +16,28 @@ class cmdFetlist(default_cmds.MuxCommand):
 	Usage:
 	+fetlist <player>
 	
-	Other commands; use 'help <command>' for more detail:
-	+fetlistaddf - Adds a kink to your "fave" category.
-	+fetlistaddy - Adds a kink to your "yes" category.
-	+fetlistaddm - Adds a kink to your "maybe" category.
-	+fetlistclear - Deletes all your kinks.
+	To edit your own:
+	
+	+fetlist <list>=<fetish>
+	
+	Accepted "lists" are "f" (Fave), "y" (Yes), and "m" (Maybe).
+	
+	Example:
+	+fetlist f=bondage
+	
+	would add "bondage" to your "faves" list.
+	
+	To delete a tag:
+	
+	+fetlist delete=<tag>
+	
+	This will search your three lists for <tag> and remove it.
+	
+	To completely clear your fetlist:
+	+fetlist clear
+	
+	This will **irreversibly** delete your whole fetlist, so be be certain
+	you want to do that!
 	
 	By Applejack/Baron Von Clop.
 	"""
@@ -29,12 +49,12 @@ class cmdFetlist(default_cmds.MuxCommand):
 	
 	def func(self):
 		#if an equals sign is not found and it isn't "clear", we assume it's a player name and search for it
-		if "=" not in self.args and not self.args == "clear":
+		if "=" not in self.args and not self.args == "clear" and not self.lhs == "delete":
 			#Target the player
 			target = self.caller.search(self.args)
 			#if name is invalid, throw error message
 			if not target:
-				self.caller.msg("Sorry, I can't find a player named %s." % self.args)
+				self.caller.msg("Sorry, I can't find a player named %s. Type 'help +fetlist' if you need help with syntax." % self.args)
 			#If name is valid, display their fetlist
 			else:
 				#Find the longest list:
@@ -96,6 +116,30 @@ class cmdFetlist(default_cmds.MuxCommand):
 			del caller.db.fetlisty[:]
 			del caller.db.fetlistm[:]
 			caller.msg("Your kinks have been cleared.")
+			return
+		
+		if self.lhs == "delete":
+			tag = self.rhs
+			caller = self.caller
+			found = None
+			
+			if tag in caller.db.fetlistf:
+				caller.db.fetlistf.remove(tag)
+				found = 1
+			
+			if tag in caller.db.fetlisty:
+				caller.db.fetlisty.remove(tag)
+				found = 1
+				
+			if tag in caller.db.fetlistm:
+				caller.db.fetlistm.remove(tag)
+				found = 1
+				
+			if found == 1:
+				caller.msg("%s has been deleted from your kinks!" % tag)
+			else:
+				caller.msg("%s wasn't found in any of your lists. Did you spell it correctly? Case sensitive!" % tag)
+				return
 			return
 		
 		#add to favorites list
