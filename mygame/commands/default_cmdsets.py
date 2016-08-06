@@ -20,6 +20,7 @@ from commands import command
 from commands import profile
 from commands import bboard
 from commands import fetlist
+from commands import staff
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -57,6 +58,7 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(bboard.cmdBbpost)
 		self.add(bboard.cmdBbread)
 		self.add(fetlist.cmdFetlist)
+		self.add(staff.cmdStaff)
         #
         # any commands you add below will overload the default ones.
         #

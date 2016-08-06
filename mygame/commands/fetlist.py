@@ -117,26 +117,35 @@ class cmdFetlist(default_cmds.MuxCommand):
 			del caller.db.fetlistm[:]
 			caller.msg("Your kinks have been cleared.")
 			return
-		
+		#if arg is "delete"
 		if self.lhs == "delete":
 			tag = self.rhs
 			caller = self.caller
 			found = None
 			
+			#check favorites
 			if tag in caller.db.fetlistf:
+				#if found, delete it
 				caller.db.fetlistf.remove(tag)
 				found = 1
 			
+			#check yes
 			if tag in caller.db.fetlisty:
+				#if found, delete it
 				caller.db.fetlisty.remove(tag)
 				found = 1
 				
+			#check maybe
 			if tag in caller.db.fetlistm:
+				#if found, delete it
 				caller.db.fetlistm.remove(tag)
 				found = 1
 				
+			#if anything matching was found
 			if found == 1:
+				#announce it was deleted
 				caller.msg("%s has been deleted from your kinks!" % tag)
+			#otherwise alert that nothing happened
 			else:
 				caller.msg("%s wasn't found in any of your lists. Did you spell it correctly? Case sensitive!" % tag)
 				return
