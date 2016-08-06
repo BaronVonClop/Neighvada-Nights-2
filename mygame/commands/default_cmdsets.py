@@ -57,10 +57,6 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(bboard.cmdBbpost)
 		self.add(bboard.cmdBbread)
 		self.add(fetlist.cmdFetlist)
-		self.add(fetlist.cmdFetlistaddf)
-		self.add(fetlist.cmdFetlistaddy)
-		self.add(fetlist.cmdFetlistaddm)
-		self.add(fetlist.cmdFetlistclear)
         #
         # any commands you add below will overload the default ones.
         #
