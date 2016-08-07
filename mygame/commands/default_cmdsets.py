@@ -21,6 +21,7 @@ from commands import profile
 from commands import bboard
 from commands import fetlist
 from commands import staff
+from commands import casino
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -59,6 +60,8 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(bboard.cmdBbread)
 		self.add(fetlist.cmdFetlist)
 		self.add(staff.cmdStaff)
+		#temporary on this list
+		self.add(casino.cmdSlots)
         #
         # any commands you add below will overload the default ones.
         #
@@ -100,19 +103,3 @@ class SessionCmdSet(default_cmds.SessionCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-
-class ChargenCmdset(CmdSet):
-    """
-    This cmdset is used in character creation.
-    """
-
-    key = "Chargen"
-    def at_cmdset_creation(self):
-		self.add(profile.CmdSetRace())
-		self.add(profile.CmdSetGender())
-		self.add(profile.CmdSetAge())
-		self.add(profile.CmdSetHeight())
-		self.add(profile.CmdSetWeight())
-		self.add(profile.CmdSetCoat())
-		self.add(profile.CmdSetMane())
-		self.add(profile.CmdSetCutieMark())
