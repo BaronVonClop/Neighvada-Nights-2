@@ -30,17 +30,20 @@ class CmdViewProfile(default_cmds.MuxCommand):
 		#if no equals sign, we assume it's a player, attempt to target it, and display profile for it.
 		if not self.rhs:
 			target = caller.search(self.args, global_search=True, typeclass="typeclasses.characters.Character")
-			self.caller.msg("  |303/=============================\\")
-			self.caller.msg(" |303/===========|550 PROFILE |303===========\\")
-			self.caller.msg("|303/=================================\\")
-			self.caller.msg("%(1)s the %(2)s %(3)s" % {"1" : target.name, "2" : target.db.gender, "3" : target.db.race})
-			self.caller.msg("       AGE: %s" % target.db.age)
-			self.caller.msg("    HEIGHT: %s" % target.db.height)
-			self.caller.msg("    WEIGHT: %s" % target.db.weight)
-			self.caller.msg("      COAT: %s" % target.db.coat)
-			self.caller.msg("      MANE: %s" % target.db.mane)
-			self.caller.msg("CUTIE MARK: %s" % target.db.cutiemark)
-			self.caller.msg("|303.=================================.")
+			if not target:
+				return
+			if target:
+				self.caller.msg("  |303/=============================\\")
+				self.caller.msg(" |303/===========|550 PROFILE |303===========\\")
+				self.caller.msg("|303/=================================\\")
+				self.caller.msg("%(1)s the %(2)s %(3)s" % {"1" : target.name, "2" : target.db.gender, "3" : target.db.race})
+				self.caller.msg("       AGE: %s" % target.db.age)
+				self.caller.msg("    HEIGHT: %s" % target.db.height)
+				self.caller.msg("    WEIGHT: %s" % target.db.weight)
+				self.caller.msg("      COAT: %s" % target.db.coat)
+				self.caller.msg("      MANE: %s" % target.db.mane)
+				self.caller.msg("CUTIE MARK: %s" % target.db.cutiemark)
+				self.caller.msg("|303.=================================.")
 			
 		if self.lhs == "race":
 			errmsg = "You must supply a race under 20 characters."

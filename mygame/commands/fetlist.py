@@ -51,7 +51,7 @@ class cmdFetlist(default_cmds.MuxCommand):
 		#if an equals sign is not found and it isn't "clear", we assume it's a player name and search for it
 		if "=" not in self.args and not self.args == "clear" and not self.lhs == "delete":
 			#Target the player
-			target = self.caller.search(self.args)
+			target = self.caller.search(self.args, global_search=True, typeclass="typeclasses.characters.Character")
 			#if name is invalid, throw error message
 			if not target:
 				self.caller.msg("Sorry, I can't find a player named %s. Type 'help +fetlist' if you need help with syntax." % self.args)
