@@ -37,7 +37,7 @@ class cmdSlots(default_cmds.MuxCommand):
 		#
 		
 		#Weighted slot list.
-		slotlist = ["G7"]
+		slotlist = ["G7", "B7"]
 		#For building the UI later
 		#I am absolutely certain there HAS to be a better way to do this, because this is dumb as fuck.
 		#But so am I, so I don't know a better way!
@@ -64,7 +64,7 @@ class cmdSlots(default_cmds.MuxCommand):
 		SB2 = {"pos1" : "|0407 7", "pos2" : " ", "pos3" : "=", "pos4" : " ", "pos5" : "|0157"}
 		Blank11 = {"pos1" : " ", "pos2" : "=", "pos3" : " ", "pos4" : "|0157", "pos5" : " "}
 		
-		#Performs the actual roll
+		#Performs the actual roll, randomly picks from the weighted list
 		leftroll = random.choice(slotlist)
 		midroll = random.choice(slotlist)
 		rightroll = random.choice(slotlist)
@@ -83,15 +83,21 @@ class cmdSlots(default_cmds.MuxCommand):
 			midcolumn = G7.copy()
 		if rightroll == "G7":
 			rightcolumn = G7.copy()
+		if leftroll == "B7":
+			leftcolumn = B7.copy()
+		if midroll == "B7":
+			midcolumn = B7.copy()
+		if rightroll == "B7":
+			rightcolumn = B7.copy()
 		
 		
 		#Debug message to player for testing, remove me when done
 		caller.msg("%(1)s   %(2)s   %(3)s" % {"1" : leftroll, "2" : midroll, "3" : rightroll})
 		
-		
+		#Display the roll to the player
 		caller.msg("------------------------")
-		caller.msg("$  %(1)s   %(2)s   %(3)s") % {"1" : leftcolumn["pos1"], "2" : midcolumn["pos1"], "3" : rightcolumn["pos1"]}
-		caller.msg("$  ")
-		caller.msg("$> ")
-		caller.msg("$  ")
-		caller.msg("$  ")
+		caller.msg("$  %(1)s  |n$  %(2)s  $  %(3)s  $" % {"1" : leftcolumn["pos1"], "2" : midcolumn["pos1"], "3" : rightcolumn["pos1"]})
+		caller.msg("$  %(1)s  $  %(2)s  $  %(3)s  $" % {"1" : leftcolumn["pos2"], "2" : midcolumn["pos2"], "3" : rightcolumn["pos2"]})
+		caller.msg("$> %(1)s  $  %(2)s  $  %(3)s  $" % {"1" : leftcolumn["pos3"], "2" : midcolumn["pos3"], "3" : rightcolumn["pos3"]})
+		caller.msg("$  %(1)s  $  %(2)s  $  %(3)s  $" % {"1" : leftcolumn["pos4"], "2" : midcolumn["pos4"], "3" : rightcolumn["pos4"]})
+		caller.msg("$  %(1)s  $  %(2)s  $  %(3)s  $" % {"1" : leftcolumn["pos5"], "2" : midcolumn["pos5"], "3" : rightcolumn["pos5"]})
