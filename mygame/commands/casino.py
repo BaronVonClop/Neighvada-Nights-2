@@ -7,6 +7,7 @@ Mostly written as an experiment for myself to learn more with.
 from evennia import Command as BaseCommand
 from evennia import default_cmds
 import random
+from evennia.utils import evtable
 
 class cmdSlots(default_cmds.MuxCommand):
 	"""
@@ -416,14 +417,14 @@ class cmdSlots(default_cmds.MuxCommand):
 			#Jackpot
 			if double7 == 3:
 				payout = 2500
+				
+		table = evtable.EvTable(table=[[leftcolumn["pos1"], leftcolumn["pos2"], leftcolumn["pos3"], leftcolumn["pos4"], leftcolumn["pos5"]],
+								[midcolumn["pos1"], midcolumn["pos2"], midcolumn["pos3"], midcolumn["pos4"], midcolumn["pos5"]],
+								[rightcolumn["pos1"], rightcolumn["pos2"], rightcolumn["pos3"], rightcolumn["pos4"], rightcolumn["pos5"]]],
+								border="cells")
+		table.reformat(width=19, align="c")
 		
-		#Display the roll to the player
-		caller.msg("------------------------")
-		caller.msg('$' + '{:^5}'.format('%s' % (leftcolumn["pos1"])) + '$' + '{:^5}'.format('%s' % (midcolumn["pos1"])) + '$' + '{:^5}'.format('%s' % (rightcolumn["pos1"])) + '$')
-		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos2"], "2" : midcolumn["pos2"], "3" : rightcolumn["pos2"]})
-		caller.msg("$> %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos3"], "2" : midcolumn["pos3"], "3" : rightcolumn["pos3"]})
-		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos4"], "2" : midcolumn["pos4"], "3" : rightcolumn["pos4"]})
-		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos5"], "2" : midcolumn["pos5"], "3" : rightcolumn["pos5"]})
+		caller.msg(table)
 		
 		#post payout
 		if payout == 0:
