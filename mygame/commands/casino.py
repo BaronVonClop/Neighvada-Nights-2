@@ -164,12 +164,15 @@ class cmdSlots(default_cmds.MuxCommand):
 			numBlank += 1
 		if leftroll == "DSB":
 			leftcolumn = DSB.copy()
+			numSingleBar += 1
 			doubleBar += 1
 		if midroll == "DSB":
 			midcolumn = DSB.copy()
+			numSingleBar += 1
 			doubleBar += 1
 		if rightroll == "DSB":
 			rightcolumn = DSB.copy()
+			numSingleBar += 1
 			doubleBar += 1
 		if leftroll == "Blank4":
 			leftcolumn = Blank4.copy()
