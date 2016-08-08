@@ -320,26 +320,6 @@ class cmdSlots(default_cmds.MuxCommand):
 			rightcolumn = Blank11.copy()
 			numBlank += 1
 
-		#Begin debug messages, remove when finished
-		caller.msg("%(1)s   %(2)s   %(3)s" % {"1" : leftroll, "2" : midroll, "3" : rightroll})
-		caller.msg(leftroll)
-		caller.msg(midroll)
-		caller.msg(rightroll)
-		#end debug
-		
-		#Translation:
-		#B7: Blue 7
-		#D5B: Double 5 bar
-		#R7: Red 7
-		#G7: Green 7
-		#DB7: Double Blue 7
-		#SB1: Single Bar
-		#DR7: Double Red 7
-		#B5: Five Bar
-		#DG7: Double Green 7
-		#SB2: Single Bar
-		
-		
 		#Let's start working on PAYOUTS
 		#Calculations all assume one bit paid in
 		#For 2-3 bit plays, just multiply result by n
@@ -424,10 +404,13 @@ class cmdSlots(default_cmds.MuxCommand):
 								border="cells")
 		table.reformat(width=19, align="c")
 		
+		caller.msg('{:-^19}'.format("SLOTS"))
 		caller.msg(table)
 		
 		#post payout
 		if payout == 0:
 			caller.msg("Sorry, you lose!")
-		if payout > 0:
+		if payout > 0 and payout < 2500:
 			caller.msg("You win! %i bits come tumbling out." % payout)
+		if payout >=2500:
+			caller.msg("JACKPOT! A massive number of bits start pouring out, totaling %i!" % payout)
