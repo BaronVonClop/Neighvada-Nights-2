@@ -35,10 +35,11 @@ class cmdSlots(default_cmds.MuxCommand):
 		#R7: Red 7
 		#G7: Green 7
 		#DB7: Double Blue 7
-		#SB: Single Bar
+		#SB1: Single Bar
 		#DR7: Double Red 7
-		#5B: Five Bar
-		#
+		#B5: Five Bar
+		#DG7: Double Green 7
+		#SB2: Single Bar
 		
 		#Weighted slot list.
 		slotlist = ["B7", "B7", "B7", "Blank1", "Blank1",
@@ -91,141 +92,229 @@ class cmdSlots(default_cmds.MuxCommand):
 		midcolumn = {}
 		rightcolumn = {}
 		
+		#declaring payout calculations
+		numB7 = 0
+		numG7 = 0
+		numR7 = 0
+		double7 = 0
+		numBlank= 0
+		numSingleBar = 0
+		numFiveBar = 0	
+		doubleBar = 0
+
 		#Remember what I said about being dumb as fuck?
 		#Hey-o!
 		#This builds the columns. Again, got to be a better way, because this is fucking DUMB.
 		if leftroll == "B7":
 			leftcolumn = B7.copy()
+			numB7 += 1
 		if midroll == "B7":
 			midcolumn = B7.copy()
+			numB7 += 1
 		if rightroll == "B7":
 			rightcolumn = B7.copy()
+			numB7 += 1
 		if leftroll == "Blank1":
 			leftcolumn = Blank1.copy()
+			numBlank += 1
 		if midroll == "Blank1":
 			midcolumn = Blank1.copy()
+			numBlank += 1
 		if rightroll == "Blank1":
 			rightcolumn = Blank1.copy()
+			numBlank += 1
 		if leftroll == "D5B":
 			leftcolumn = D5B.copy()
+			numFiveBar += 1
+			doubleBar += 1
 		if midroll == "D5B":
 			midcolumn = D5B.copy()
+			numFiveBar += 1
+			doubleBar += 1
 		if rightroll == "D5B":
 			rightcolumn = D5B.copy()
+			numFiveBar += 1
+			doubleBar += 1
 		if leftroll == "Blank2":
 			leftcolumn = Blank2.copy()
+			numBlank += 1
 		if midroll == "Blank2":
 			midcolumn = Blank2.copy()
+			numBlank += 1
 		if rightroll == "Blank2":
 			rightcolumn = Blank2.copy()
+			numBlank += 1
 		if leftroll == "R7":
 			leftcolumn = R7.copy()
+			numR7 += 1
 		if midroll == "R7":
 			midcolumn = R7.copy()
+			numR7 += 1
 		if rightroll == "R7":
 			rightcolumn = R7.copy()
+			numR7 += 1
 		if leftroll == "Blank3":
 			leftcolumn = Blank3.copy()
+			numBlank += 1
 		if midroll == "Blank3":
 			midcolumn = Blank3.copy()
+			numBlank += 1
 		if rightroll == "Blank3":
 			rightcolumn = Blank3.copy()
+			numBlank += 1
 		if leftroll == "DSB":
 			leftcolumn = DSB.copy()
+			doubleBar += 1
 		if midroll == "DSB":
 			midcolumn = DSB.copy()
+			doubleBar += 1
 		if rightroll == "DSB":
 			rightcolumn = DSB.copy()
+			doubleBar += 1
 		if leftroll == "Blank4":
 			leftcolumn = Blank4.copy()
+			numBlank += 1
 		if midroll == "Blank4":
 			midcolumn = Blank4.copy()
+			numBlank += 1
 		if rightroll == "Blank4":
 			rightcolumn = Blank4.copy()
+			numBlank += 1
 		if leftroll == "G7":
 			leftcolumn = G7.copy()
+			numG7 += 1
 		if midroll == "G7":
 			midcolumn = G7.copy()
+			numG7 += 1
 		if rightroll == "G7":
 			rightcolumn = G7.copy()
+			numG7 += 1
 		if leftroll == "Blank5":
 			leftcolumn = Blank5.copy()
+			numBlank += 1
 		if midroll == "Blank5":
 			midcolumn = Blank5.copy()
+			numBlank += 1
 		if rightroll == "Blank5":
 			rightcolumn = Blank5.copy()
+			numBlank += 1
 		if leftroll == "DB7":
 			leftcolumn = DB7.copy()
+			numB7 += 1
+			double7 += 1
 		if midroll == "DB7":
 			midcolumn = DB7.copy()
+			numB7 += 1
+			double7 += 1
 		if rightroll == "DB7":
 			rightcolumn = DB7.copy()
+			numB7 += 1
+			double7 += 1
 		if leftroll == "Blank6":
 			leftcolumn = Blank6.copy()
+			numBlank += 1
 		if midroll == "Blank6":
 			midcolumn = Blank6.copy()
+			numBlank += 1
 		if rightroll == "Blank6":
 			rightcolumn = Blank6.copy()
+			numBlank += 1
 		if leftroll == "SB1":
 			leftcolumn = SB1.copy()
+			numSingleBar += 1
 		if midroll == "SB1":
 			midcolumn = SB1.copy()
+			numSingleBar += 1
 		if rightroll == "SB1":
 			rightcolumn = SB1.copy()
+			numSingleBar += 1
 		if leftroll == "Blank7":
 			leftcolumn = Blank7.copy()
+			numBlank += 1
 		if midroll == "Blank7":
 			midcolumn = Blank7.copy()
+			numBlank += 1
 		if rightroll == "Blank7":
 			rightcolumn = Blank7.copy()
+			numBlank += 1
 		if leftroll == "DR7":
 			leftcolumn = DR7.copy()
+			double7 += 1
+			numR7 += 1
 		if midroll == "DR7":
 			midcolumn = DR7.copy()
+			double7 += 1
+			numR7 += 1
 		if rightroll == "DR7":
 			rightcolumn = DR7.copy()
+			double7 += 1
+			numR7 += 1
 		if leftroll == "Blank8":
 			leftcolumn = Blank8.copy()
+			numBlank += 1
 		if midroll == "Blank8":
 			midcolumn = Blank8.copy()
+			numBlank += 1
 		if rightroll == "Blank8":
 			rightcolumn = Blank8.copy()
+			numBlank += 1
 		if leftroll == "B5":
 			leftcolumn = B5.copy()
+			numFiveBar += 1
 		if midroll == "B5":
 			midcolumn = B5.copy()
+			numFiveBar += 1
 		if rightroll == "B5":
 			rightcolumn = B5.copy()
+			numFiveBar += 1
 		if leftroll == "Blank9":
 			leftcolumn = Blank9.copy()
+			numBlank += 1
 		if midroll == "Blank9":
 			midcolumn = Blank9.copy()
+			numBlank += 1
 		if rightroll == "Blank9":
 			rightcolumn = Blank9.copy()
+			numBlank += 1
 		if leftroll == "DG7":
 			leftcolumn = DG7.copy()
+			double7 += 1
+			numG7 += 1
 		if midroll == "DG7":
 			midcolumn = DG7.copy()
+			double7 += 1
+			numG7 += 1
 		if rightroll == "DG7":
 			rightcolumn = DG7.copy()
+			double7 += 1
+			numG7 += 1
 		if leftroll == "Blank10":
 			leftcolumn = Blank10.copy()
+			numBlank += 1
 		if midroll == "Blank10":
 			midcolumn = Blank10.copy()
+			numBlank += 1
 		if rightroll == "Blank10":
 			rightcolumn = Blank10.copy()
+			numBlank += 1
 		if leftroll == "SB2":
 			leftcolumn = SB2.copy()
+			numSingleBar += 1
 		if midroll == "SB2":
 			midcolumn = SB2.copy()
+			numSingleBar += 1
 		if rightroll == "SB2":
 			rightcolumn = SB2.copy()
+			numSingleBar += 1
 		if leftroll == "Blank11":
 			leftcolumn = Blank11.copy()
+			numBlank += 1
 		if midroll == "Blank11":
 			midcolumn = Blank11.copy()
+			numBlank += 1
 		if rightroll == "Blank11":
 			rightcolumn = Blank11.copy()
+			numBlank += 1
 
 		#Begin debug messages, remove when finished
 		caller.msg("%(1)s   %(2)s   %(3)s" % {"1" : leftroll, "2" : midroll, "3" : rightroll})
@@ -234,20 +323,100 @@ class cmdSlots(default_cmds.MuxCommand):
 		caller.msg(rightroll)
 		#end debug
 		
+		#Translation:
+		#B7: Blue 7
+		#D5B: Double 5 bar
+		#R7: Red 7
+		#G7: Green 7
+		#DB7: Double Blue 7
+		#SB1: Single Bar
+		#DR7: Double Red 7
+		#B5: Five Bar
+		#DG7: Double Green 7
+		#SB2: Single Bar
+		
+		
 		#Let's start working on PAYOUTS
 		#Calculations all assume one bit paid in
 		#For 2-3 bit plays, just multiply result by n
 		
-		if ((leftroll == "D5B" or leftroll == "DSB" or leftroll == "SB1" or leftroll == "SB2" or leftroll == "B5") and
-			(midroll == "D5B" or midroll == "DSB" or midroll == "SB1" or midroll == "SB2" or midroll == "B5") and
-			(rightroll == "D5B" or rightroll == "DSB" or rightroll == "SB1" or rightroll == "SB2" or rightroll == "B5")):
+		#Three of anything
+		if numBlank == 0:
+			payout = 2
+			if (doubleBar + double7) == 1:
+				payout = 4
+			if (doubleBar + double7) == 2:
+				payout = 8
+			if (doubleBar + double7) == 3:
+				payout = 16
+		#Three of any bar
+		if (numSingleBar + numFiveBar) == 3:
 			payout = 5
-		if leftroll == "SB1" or leftroll == "SB2" or leftroll == "DSB" and midroll == "SB1" or midroll == "SB2" or midroll == "DSB" and rightroll == "SB1" or rightroll == "SB2" or rightroll == "DSB":
+			if doubleBar == 1:
+				payout = 10
+			if doubleBar == 2:
+				payout = 20
+			if doubleBar == 3:
+				payout = 40
+		#Three single bars
+		if numSingleBar == 3:
 			payout = 10
+			if doubleBar == 1:
+				payout = 20
+			if doubleBar == 2:
+				payout = 40
+			if doubleBar == 3:
+				payout = 80
+		#Three five bars
+		if numFiveBar == 3:
+			payout = 20
+			if doubleBar == 1:
+				payout = 40
+			if doubleBar == 2:
+				payout = 80
+			if doubleBar == 3:
+				payout = 160
+		#Three of any 7s
+		if (numB7 + numG7 + numR7) == 3:
+			payout = 20
+			if double7 == 1:
+				payout = 40
+			if double7 == 2:
+				payout = 80
+			if double7 == 3:
+				payout = 160
+		#Three green 7
+		if numG7 == 3:
+			payout = 40
+			if double7 == 1:
+				payout = 80
+			if double7 == 2:
+				payout = 160
+			if double7 == 3:
+				payout = 320
+		#Three blue 7
+		if numB7 == 3:
+			payout = 100
+			if double7 == 1:
+				payout = 200
+			if double7 == 2:
+				payout = 400
+			if double7 == 3:
+				payout = 800
+		#Three red 7
+		if numR7 == 3:
+			payout = 200
+			if double7 == 1:
+				payout = 400
+			if double7 == 2:
+				payout = 800
+			#Jackpot
+			if double7 == 3:
+				payout = 2500
 		
 		#Display the roll to the player
 		caller.msg("------------------------")
-		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos1"], "2" : midcolumn["pos1"], "3" : rightcolumn["pos1"]})
+		caller.msg('$' + '{:^5}'.format('%s' % (leftcolumn["pos1"])) + '$' + '{:^5}'.format('%s' % (midcolumn["pos1"])) + '$' + '{:^5}'.format('%s' % (rightcolumn["pos1"])) + '$')
 		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos2"], "2" : midcolumn["pos2"], "3" : rightcolumn["pos2"]})
 		caller.msg("$> %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos3"], "2" : midcolumn["pos3"], "3" : rightcolumn["pos3"]})
 		caller.msg("$  %(1)s  |n$  %(2)s  |n$  %(3)s  |n$" % {"1" : leftcolumn["pos4"], "2" : midcolumn["pos4"], "3" : rightcolumn["pos4"]})
