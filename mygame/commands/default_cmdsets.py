@@ -22,6 +22,7 @@ from commands import bboard
 from commands import fetlist
 from commands import staff
 from commands import casino
+from commands import request
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -60,6 +61,7 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(bboard.cmdBbread)
 		self.add(fetlist.cmdFetlist)
 		self.add(staff.cmdStaff)
+		self.add(request.cmdRequest)
 		#temporary on this list
 		self.add(casino.cmdSlots)
         #

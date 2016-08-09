@@ -25,12 +25,7 @@ class cmdBbpost(default_cmds.MuxCommand):
 	key = "+bbpost"
 	help_category= "BBS"
 	
-	def parse(self):
-		title, text = None, None
-		if "=" in self.args:
-			title, text = [part.strip() 
-							for part in self.args.rsplit("=", 1)]
-		self.title, self.text = title, text
+
 	
 	
 	def func(self):

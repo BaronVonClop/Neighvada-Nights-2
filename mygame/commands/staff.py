@@ -12,7 +12,8 @@ class cmdStaff(default_cmds.MuxCommand):
 	"""
 	Shows a list of staff members.
 	
-	
+	Usage:
+	+staff
 	"""
 	
 	key = "+staff"
@@ -35,4 +36,4 @@ class cmdStaff(default_cmds.MuxCommand):
 		caller.msg("!   NAME   !      ROLE      !    ONLINE    !")
 		target = caller.search("Applejack")
 		checkonline(target)
-		caller.msg("!Applejack ! Head Wiz/Coder ! %s" % self.online)
+		caller.msg("!Applejack ! Head Wiz/Coder !     %s" % self.online)

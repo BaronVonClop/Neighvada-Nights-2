@@ -18,6 +18,9 @@ class cmdSlots(default_cmds.MuxCommand):
 	Usage (debug only):
 	slots
 	
+	To view payouts:
+	slots payouts
+	
 	Incomplete.
 	"""
 	#Based on the assumed odds from "Double Strike". Found here:
@@ -32,7 +35,7 @@ class cmdSlots(default_cmds.MuxCommand):
 		
 		if self.args == "payouts":
 			payouttable = evtable.EvTable("", "No Doubles", "One Double", "Two Doubles", "Three Doubles",
-										table=[["Any 3", "Any 3 Bars", "3 Single Bars", "3 Double Bars",
+										table=[["Any 3", "Any 3 Bars", "3 Single Bars", "3 Five Bars",
 										"Any 7s", "3 Green 7s", "3 Blue 7s", "3 Red 7s"], ["2", "5",
 										"10", "20", "20", "40", "100", "200"],
 										["4", "10", "20", "40", "40", "80", "200", "400"],
