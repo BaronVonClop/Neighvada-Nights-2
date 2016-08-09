@@ -41,6 +41,7 @@ class Character(DefaultCharacter):
 		self.db.cutiemark = "|500UNSET"
 		self.db.occupation = "|500UNSET"
 		self.db.eyes = "|500UNSET"
+		self.db.requestsmade = []
 		self.db.fetlistf = []
 		self.db.fetlisty = []
 		self.db.fetlistm = []
