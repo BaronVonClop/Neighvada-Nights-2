@@ -15,8 +15,5 @@ class cmdRequest(default_cmds.MuxCommand):
 	help_category = "general"
 	
 	def func(self):
-		
-		#target the request item
-		target = self.caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
-		#If "open" is the arg, we open the new ticket menu
+		#All we do here is open the EvMenu world.request, everything else is handled there.
 		EvMenu(self.caller, "world.request", startnode="start", cmdset_mergetype="Replace", cmdset_priority=1, auto_quit=True, cmd_on_exit="look", persistent=False)

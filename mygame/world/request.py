@@ -4,6 +4,7 @@ from evennia.utils.evtable import EvTable
 def start(caller):
 	caller.ndb._menutree.title = "BLANK"
 	caller.ndb._menutree.body = "BLANK"
+	caller.ndb._menutree.tempticketnumber = 0
 	text = \
 	"""
 	Welcome to the request system.
@@ -26,10 +27,30 @@ def start(caller):
 				
 	return text, options
 	
+def view_open_tickets(caller):
+	text = \
+	"""
+	|500OPEN TICKETS|n
+	
+	You currently have the following tickets open:
+	"""
+	numtickets = len(caller.db.requestsmade)
+	x = 1
+	
+	while (x <= numtickets):
+		text +="|/%i" % caller.db.requestsmade[x-1]
+		x += 1
+	text += "|/Type the number you want to see, or 'quit' to exit."
+	options = ({"key": "_default",
+				"exec": _get_ticket,
+				"goto": "view_got_ticket"})
+				
+	return text, options
+	
 def open_ticket(caller):
 	text = \
 	"""
-	|500 OPEN TICKET|n
+	|500OPEN NEW TICKET|n
 	
 	Alright! Let's open a ticket, then.
 	
@@ -37,6 +58,25 @@ def open_ticket(caller):
 	"""
 	
 	text += "|/Your ticket's current info is:"
+	text += "|/|/Title: %s" % caller.ndb._menutree.title
+	text += "|/|/Body: %s" % caller.ndb._menutree.body
+	options = ({"desc": "Edit Title.",
+				"goto": "edittitle"},
+				{"desc": "Edit body.",
+				"goto": "editbody"},
+				{"desc": "Submit ticket.",
+				"exec": _create_ticket,
+				"goto": "start"})
+				
+	return text, options
+	
+def view_got_ticket(caller):
+	text = \
+	"""
+	|500VIEW TICKET|n
+	"""
+	text += "|/|/Here is the status of ticket #%s:" %caller.ndb._menutree.tempticketnumber
+	text += "|/|/Your ticket's current info is:"
 	text += "|/|/Title: %s" % caller.ndb._menutree.title
 	text += "|/|/Body: %s" % caller.ndb._menutree.body
 	options = ({"desc": "Edit Title.",
@@ -79,7 +119,22 @@ def editbody(caller):
 				"goto": "open_ticket"})
 	return text, options
 	
+def _get_ticket(caller, raw_string):
+	inp = raw_string.strip()
+	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
+	caller.ndb._menutree.tempticketnumber = inp
+	if not inp:
+		caller.msg("You didn't enter a number!")
+	else:
+		if not caller == target.db.requestdict["reqauthor%s" % inp]:
+			caller.msg("That's not your ticket! Only wizards can see other player's tickets.")
+			return
+		if caller == target.db.requestdict["reqauthor%s" % inp]:
+			caller.ndb._menutree.title = (target.db.requestdict["reqtitle%s" % inp])
+			caller.ndb._menutree.body = (target.db.requestdict["reqtext%s" % inp])
+		
 	
+#set the title
 def _set_title(caller, raw_string):
 	inp = raw_string.strip()
 	if not inp:
@@ -88,6 +143,7 @@ def _set_title(caller, raw_string):
 		caller.ndb._menutree.title = "%s" % inp
 		caller.msg("Title set to %s." % caller.ndb._menutree.title)
 		
+#set body
 def _set_body(caller, raw_string):
 	inp = raw_string.strip()
 	if not inp:
@@ -96,14 +152,24 @@ def _set_body(caller, raw_string):
 		caller.ndb._menutree.body = "%s" % inp
 		caller.msg("Title set to %s." % caller.ndb._menutree.body)
 		
+#the Big Shit, creating the ticket
 def _create_ticket(caller):
+	#target master request item
 	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
 	caller.msg("Submitting your ticket...")
+	#If the user tried to submit a ticket with no title or body, reject it
 	if caller.ndb._menutree.body == "BLANK" or caller.ndb._menutree.title == "BLANK":
 		caller.msg("You tried to submit an unfinished ticket! Try again.")
+		return
 	else:
+		#save body
 		(target.db.requestdict["reqtext%i" % target.db.requestnum]) = caller.ndb._menutree.body
+		#save title
 		(target.db.requestdict["reqtitle%i" % target.db.requestnum]) = caller.ndb._menutree.title
+		#set author to the submitter
+		(target.db.requestdict["reqauthor%i" % target.db.requestnum]) = caller
+		#add the ticket number to the author's profile for viewing later
 		caller.db.requestsmade.append(target.db.requestnum)
 		caller.msg("Your ticket has been submitted as #%i" % target.db.requestnum)
+		#increase the number for the next ticket
 		target.db.requestnum += 1
