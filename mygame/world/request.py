@@ -18,10 +18,8 @@ def start(caller):
 	
 	options = ({"desc": "Open a new ticket.",
 				"goto": "open_ticket"},
-				{"desc": "View my open tickets.",
+				{"desc": "View, edit or close one of my open tickets.",
 				"goto": "view_open_tickets"},
-				{"desc": "Close a ticket.",
-				"goto": "close_ticket"},
 				{"desc": "View my closed tickets.",
 				"goto": "view_closed_tickets"})
 				
@@ -38,7 +36,7 @@ def view_open_tickets(caller):
 	x = 1
 	
 	while (x <= numtickets):
-		text +="|/%i" % caller.db.requestsmade[x-1]
+		text +="|/#%i:" % caller.db.requestsmade[x-1]
 		x += 1
 	text += "|/Type the number you want to see, or 'quit' to exit."
 	options = ({"key": "_default",
@@ -79,14 +77,16 @@ def view_got_ticket(caller):
 	text += "|/|/Your ticket's current info is:"
 	text += "|/|/Title: %s" % caller.ndb._menutree.title
 	text += "|/|/Body: %s" % caller.ndb._menutree.body
+	text += "|/|/Type 'QUIT' to discard changes and exit."
 	options = ({"desc": "Edit Title.",
 				"goto": "editopentitle"},
-				{"desc": "Edit body.",
-				"goto": "editopenbody"},
 				{"desc": "Add comment.",
 				"goto": "addcomment"},
 				{"desc": "Submit edits.",
 				"exec": _edit_ticket,
+				"goto": "start"},
+				{"desc": "Close ticket.",
+				"exec": _close_ticket,
 				"goto": "start"})
 				
 	return text, options
@@ -125,22 +125,6 @@ def editopentitle(caller):
 				"goto": "view_got_ticket"})
 	return text, options
 	
-	
-#edit an open ticket's body
-def editopenbody(caller):
-	text = \
-	"""
-	Enter the body for your ticket.
-	
-	Here you can give as much detail as you like! Screenshots, etc.
-	
-	Please note that if you are reporting a bug in code, you should submit an issue on github instead.
-	"""
-	
-	options = ({"key": "_default",
-				"exec": _set_body,
-				"goto": "view_got_ticket"})
-	return text, options
 	
 #edit a new ticket's title
 def edittitle(caller):
@@ -251,7 +235,16 @@ def _edit_ticket(caller):
 		return
 	else:
 		#save body
-		(target.db.requestdict["reqtext%i" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.body
+		(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.body
 		#save title
-		(target.db.requestdict["reqtitle%i" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.title
+		(target.db.requestdict["reqtitle%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.title
 		caller.msg("Your ticket, number #%s, has been edited." % caller.ndb._menutree.tempticketnumber)
+		
+def _close_ticket(caller):
+	#target master request item
+	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
+	(target.db.requestdict["isclosed%s" % caller.ndb._menutree.tempticketnumber]) = 1
+	caller.ndb._menutree.tempticketnumber = int(caller.ndb._menutree.tempticketnumber)
+	caller.db.requestsmade.remove(caller.ndb._menutree.tempticketnumber)
+	caller.db.requestsclosed.append(caller.ndb._menutree.tempticketnumber)
+	(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) += ("|/|/CLOSED BY %s" % caller)

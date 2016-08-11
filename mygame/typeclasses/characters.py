@@ -42,6 +42,7 @@ class Character(DefaultCharacter):
 		self.db.occupation = "|500UNSET"
 		self.db.eyes = "|500UNSET"
 		self.db.requestsmade = []
+		self.db.requestsclosed = []
 		self.db.fetlistf = []
 		self.db.fetlisty = []
 		self.db.fetlistm = []
