@@ -45,6 +45,26 @@ def view_open_tickets(caller):
 				
 	return text, options
 	
+def view_closed_tickets(caller):
+	text = \
+	"""
+	|500CLOSED TICKETS|n
+	
+	Your following tickets have been closed:
+	"""
+	numtickets = len(caller.db.requestsclosed)
+	x = 1
+	
+	while (x <= numtickets):
+		text +="|/#%s:" % caller.db.requestsclosed[x-1]
+		x += 1
+	text += "|/Type the number you want to see, or 'quit' to exit."
+	options = ({"key": "_default",
+				"exec": _get_ticket,
+				"goto": "view_got_closed_ticket"})
+				
+	return text, options
+	
 def open_ticket(caller):
 	text = \
 	"""
@@ -87,6 +107,19 @@ def view_got_ticket(caller):
 				"goto": "start"},
 				{"desc": "Close ticket.",
 				"exec": _close_ticket,
+				"goto": "start"})
+				
+	return text, options
+	
+def view_got_closed_ticket(caller):
+	text = \
+	"""
+	|500VIEW TICKET|n
+	"""
+	text += "|/|/Here was the info of your closed ticket, #%s:" %caller.ndb._menutree.tempticketnumber
+	text += "|/|/Title: %s" % caller.ndb._menutree.title
+	text += "|/|/Body: %s" % caller.ndb._menutree.body
+	options = ({"desc": "Back.",
 				"goto": "start"})
 				
 	return text, options
@@ -163,17 +196,15 @@ def _get_ticket(caller, raw_string):
 	inp = raw_string.strip()
 	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
 	caller.ndb._menutree.tempticketnumber = inp
-	if not inp:
-		caller.msg("You didn't enter a number!")
-	else:
-		#check if player is ticket owner, if not then reject
-		if not caller == target.db.requestdict["reqauthor%s" % inp]:
-			caller.msg("That's not your ticket! Only wizards can see other player's tickets.")
-			return
-		#if player is ticket owner, pull the info for it
-		if caller == target.db.requestdict["reqauthor%s" % inp]:
-			caller.ndb._menutree.title = (target.db.requestdict["reqtitle%s" % inp])
-			caller.ndb._menutree.body = (target.db.requestdict["reqtext%s" % inp])
+
+	#check if player is ticket owner, if not then reject
+	if not caller == target.db.requestdict["reqauthor%s" % inp]:
+		caller.msg("That's not your ticket! Only wizards can see other player's tickets.")
+		return
+	#if player is ticket owner, pull the info for it
+	if caller == target.db.requestdict["reqauthor%s" % inp]:
+		caller.ndb._menutree.title = (target.db.requestdict["reqtitle%s" % inp])
+		caller.ndb._menutree.body = (target.db.requestdict["reqtext%s" % inp])
 		
 	
 #set the title
@@ -218,6 +249,7 @@ def _create_ticket(caller):
 		(target.db.requestdict["reqtitle%i" % target.db.requestnum]) = caller.ndb._menutree.title
 		#set author to the submitter
 		(target.db.requestdict["reqauthor%i" % target.db.requestnum]) = caller
+		(target.db.requestdict["isclosed%i" % target.db.requestnum]) = 0
 		#add the ticket number to the author's profile for viewing later
 		caller.db.requestsmade.append(target.db.requestnum)
 		caller.msg("Your ticket has been submitted as #%i" % target.db.requestnum)
@@ -238,7 +270,6 @@ def _edit_ticket(caller):
 		(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.body
 		#save title
 		(target.db.requestdict["reqtitle%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.title
-		caller.msg("Your ticket, number #%s, has been edited." % caller.ndb._menutree.tempticketnumber)
 		
 def _close_ticket(caller):
 	#target master request item

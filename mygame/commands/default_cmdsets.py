@@ -62,6 +62,7 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(fetlist.cmdFetlist)
 		self.add(staff.cmdStaff)
 		self.add(request.cmdRequest)
+		self.add(request.cmdRespond)
 		#temporary on this list
 		self.add(casino.cmdSlots)
         #

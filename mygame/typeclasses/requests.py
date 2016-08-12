@@ -15,4 +15,4 @@ from typeclasses.objects import Object
 class request(Object):
 	def at_object_creation(self):
 		self.db.requestnum = 1
-		self.db.requestdict = {'reqtext0': None, 'reqtitle0': None, 'reqauthor0': None, 'isclosed0': None}
+		self.db.requestdict = {'reqtext0': None, 'reqtitle0': None, 'reqauthor0': None, 'isclosed0': 1}

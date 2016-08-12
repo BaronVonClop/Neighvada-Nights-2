@@ -17,3 +17,17 @@ class cmdRequest(default_cmds.MuxCommand):
 	def func(self):
 		#All we do here is open the EvMenu world.request, everything else is handled there.
 		EvMenu(self.caller, "world.request", startnode="start", cmdset_mergetype="Replace", cmdset_priority=1, auto_quit=True, cmd_on_exit="look", persistent=False)
+class cmdRespond(default_cmds.MuxCommand):
+	"""
+	Respond to a request.
+	
+	Wizards only.
+	"""
+	
+	key = "respond"
+	lock = "perm(Wizards)"
+	help_category = "general"
+	
+	def func(self):
+		#All we do here is open the EvMenu world.request, everything else is handled there.
+		EvMenu(self.caller, "world.respond", startnode="start", cmdset_mergetype="Replace", cmdset_priority=1, auto_quit=True, cmd_on_exit="look", persistent=False)
