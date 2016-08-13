@@ -7,6 +7,7 @@ Meant to replicate the +finger/+hoof system from ProtoMUCK/MUF.
 
 from evennia import Command as BaseCommand
 from evennia import default_cmds
+from evennia.utils.evmenu import EvMenu
 
 class CmdViewProfile(default_cmds.MuxCommand):
 	"""
@@ -187,3 +188,10 @@ class CmdViewProfile(default_cmds.MuxCommand):
 			caller.db.cutiemark = self.rhs
 			self.caller.msg("Your cutie mark was set to %s." % self.rhs)
 			return
+class cmdEditplayer(default_cmds.MuxCommand):
+
+	key = "editplayer"
+	help_category = "profile"
+	
+	def func(self):
+		EvMenu(self.caller, "world.editplayer", startnode="start", cmdset_mergetype="Replace", cmdset_priority=1, auto_quit=True, cmd_on_exit="look", persistent=False)

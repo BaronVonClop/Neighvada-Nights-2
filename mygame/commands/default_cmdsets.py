@@ -65,6 +65,7 @@ class PlayerCmdSet(default_cmds.PlayerCmdSet):
 		self.add(request.cmdRespond)
 		#temporary on this list
 		self.add(casino.cmdSlots)
+		self.add(profile.cmdEditplayer)
         #
         # any commands you add below will overload the default ones.
         #
