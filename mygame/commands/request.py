@@ -25,9 +25,9 @@ class cmdRespond(default_cmds.MuxCommand):
 	"""
 	
 	key = "respond"
-	lock = "perm(Wizards)"
+	lock = "cmd: perm(Wizards)"
 	help_category = "general"
 	
 	def func(self):
-		#All we do here is open the EvMenu world.request, everything else is handled there.
+		#All we do here is open the EvMenu world.respond, everything else is handled there.
 		EvMenu(self.caller, "world.respond", startnode="start", cmdset_mergetype="Replace", cmdset_priority=1, auto_quit=True, cmd_on_exit="look", persistent=False)

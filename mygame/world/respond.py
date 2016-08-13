@@ -1,6 +1,8 @@
 def start(caller):
 	caller.ndb._menutree.title = "BLANK"
 	caller.ndb._menutree.body = "BLANK"
+	caller.ndb._menutree.author = "BLANK"
+	caller.ndb._menutree.commadded = 0
 	caller.ndb._menutree.tempticketnumber = 0
 	text = \
 	"""
@@ -70,7 +72,7 @@ def view_got_closed_ticket(caller):
 	|500VIEW TICKET|n
 	"""
 	text += "|/|/Here is the status of closed ticket #%s:" % caller.ndb._menutree.tempticketnumber
-	text += "|/|/Your ticket's current info is:"
+	text += "|/|/This ticket's current info is:"
 	text += "|/|/Title: %s" % caller.ndb._menutree.title
 	text += "|/|/Body: %s" % caller.ndb._menutree.body
 	text += "|/|/Type 'QUIT' to discard changes and exit."
@@ -84,8 +86,9 @@ def view_got_ticket(caller):
 	"""
 	|500VIEW TICKET|n
 	"""
-	text += "|/|/Here is the status of your open ticket, #%s:" % caller.ndb._menutree.tempticketnumber
-	text += "|/|/Your ticket's current info is:"
+	text += "|/|/Here is the status of open ticket #%s:" % caller.ndb._menutree.tempticketnumber
+	text += "|/|/This ticket's current info is:"
+	text += "|/|/Submitted by: %s" % caller.ndb._menutree.author
 	text += "|/|/Title: %s" % caller.ndb._menutree.title
 	text += "|/|/Body: %s" % caller.ndb._menutree.body
 	text += "|/|/Type 'QUIT' to discard changes and exit."
@@ -107,8 +110,6 @@ def addcomment(caller):
 	
 	This will add a comment to the ticket.
 	
-	Use this for things like new info, or if you've been asked to by a Wizard.
-	
 	To cancel, type QUIT.
 	"""
 	options = ({"key": "_default",
@@ -123,24 +124,31 @@ def _add_comment(caller, raw_string):
 	else:
 		caller.ndb._menutree.body += ("|/COMMENT: %s" % inp + " - BY %s" % caller)
 		caller.msg("Comment added.")
+		caller.ndb._menutree.commadded += 1
+		
 		
 def _close_ticket(caller):
 	#target master request item
-	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
-	#mark as closed
-	(target.db.requestdict["isclosed%s" % caller.ndb._menutree.tempticketnumber]) = 1
-	#add any comments that were made
-	(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.body
-	#downcast number
-	caller.ndb._menutree.tempticketnumber = int(caller.ndb._menutree.tempticketnumber)
-	#add closed note
-	(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) += ("|/|/CLOSED BY %s" % caller)
-	author = target.db.requestdict["reqauthor%i" % (target.db.requestnum - 1)]
-	#target submitting player
-	target = caller.search(author, global_search=True, typeclass="typeclasses.characters.Character")
-	#move the request from their open to closed list
-	target.db.requestsmade.remove(caller.ndb._menutree.tempticketnumber)
-	target.db.requestsclosed.append(caller.ndb._menutree.tempticketnumber)
+	if caller.ndb._menutree.commadded == 0:
+		caller.msg("|500!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		caller.msg("|500You need to add a comment before you close the ticket!")
+		caller.msg("|500!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	else:
+		target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
+		#mark as closed
+		(target.db.requestdict["isclosed%s" % caller.ndb._menutree.tempticketnumber]) = 1
+		#add any comments that were made
+		(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) = caller.ndb._menutree.body
+		#downcast number
+		caller.ndb._menutree.tempticketnumber = int(caller.ndb._menutree.tempticketnumber)
+		#add closed note
+		(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) += ("|/|/CLOSED BY %s" % caller)
+		author = target.db.requestdict["reqauthor%i" % (target.db.requestnum - 1)]
+		#target submitting player
+		target = caller.search(author, global_search=True, typeclass="typeclasses.characters.Character")
+		#move the request from their open to closed list
+		target.db.requestsmade.remove(caller.ndb._menutree.tempticketnumber)
+		target.db.requestsclosed.append(caller.ndb._menutree.tempticketnumber)
 	
 				
 def _edit_ticket(caller):
@@ -157,8 +165,6 @@ def _get_ticket(caller, raw_string):
 	target = caller.search("request", global_search=True, typeclass="typeclasses.requests.request")
 	caller.ndb._menutree.tempticketnumber = inp
 	
-	caller.msg(target.db.requestdict["reqtitle%s" % inp])
-	caller.msg(target.db.requestdict["reqtext%s" % inp])
-	
 	caller.ndb._menutree.title = (target.db.requestdict["reqtitle%s" % inp])
 	caller.ndb._menutree.body = (target.db.requestdict["reqtext%s" % inp])
+	caller.ndb._menutree.author = (target.db.requestdict["reqauthor%s" % inp])
