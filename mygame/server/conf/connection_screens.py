@@ -20,11 +20,11 @@ from evennia import utils
 
 CONNECTION_SCREEN = \
 """{b=============================================================={n
- Welcome to Neighvada Nights, version 0.0.1A.
-      We are currently in ALPHA testing.
- Many features are either broken, or do not exist.
+           Neighvada Nights v0.0.2A
+          This game is STRICTLY 18+.
+ If you are under the age of 18, disconnect immediately.
 
- If you have an existing account, connect to it by typing:
+If you have an existing account, connect to it by typing:
       {wconnect <username> <password>{n
  If you need to create an account, type (without the <>'s):
       {wcreate <username> <password>{n

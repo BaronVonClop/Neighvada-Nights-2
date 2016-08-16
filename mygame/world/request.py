@@ -1,9 +1,11 @@
 from evennia.utils.evtable import EvTable
-
+from time import gmtime, strftime
 
 def start(caller):
 	caller.ndb._menutree.title = "BLANK"
 	caller.ndb._menutree.body = "BLANK"
+	caller.ndb._menutree.time = "BLANK"
+	caller.ndb._menutree.valid = "No"
 	caller.ndb._menutree.tempticketnumber = 0
 	text = \
 	"""
@@ -93,21 +95,28 @@ def view_got_ticket(caller):
 	"""
 	|500VIEW TICKET|n
 	"""
-	text += "|/|/Here is the status of your open ticket, #%s:" %caller.ndb._menutree.tempticketnumber
-	text += "|/|/Your ticket's current info is:"
-	text += "|/|/Title: %s" % caller.ndb._menutree.title
-	text += "|/|/Body: %s" % caller.ndb._menutree.body
-	text += "|/|/Type 'QUIT' to discard changes and exit."
-	options = ({"desc": "Edit Title.",
-				"goto": "editopentitle"},
-				{"desc": "Add comment.",
-				"goto": "addcomment"},
-				{"desc": "Submit edits.",
-				"exec": _edit_ticket,
-				"goto": "start"},
-				{"desc": "Close ticket.",
-				"exec": _close_ticket,
-				"goto": "start"})
+	if caller.ndb._menutree.valid == "Yes":
+		text += "|/|/Here is the status of your open ticket, #%s:" %caller.ndb._menutree.tempticketnumber
+		text += "|/|/Your ticket's current info is:"
+		text += "|/|/Title: %s" % caller.ndb._menutree.title
+		text += "|/|/Body: %s" % caller.ndb._menutree.body
+		text += "|/|/Time submitted: %s" % caller.ndb._menutree.time
+		text += "|/|/Type 'QUIT' to discard changes and exit."
+		options = ({"desc": "Edit Title.",
+					"goto": "editopentitle"},
+					{"desc": "Add comment.",
+					"goto": "addcomment"},
+					{"desc": "Submit edits.",
+					"exec": _edit_ticket,
+					"goto": "start"},
+					{"desc": "Close ticket.",
+					"exec": _close_ticket,
+					"goto": "start"})
+	if caller.ndb._menutree.valid == "No":
+		text += "|/|/That ticket number isn't valid. Please try again."
+		text += "|/|/Press any key to continue."
+		options = ({"key": "_default",
+					"goto": "view_open_tickets"})
 				
 	return text, options
 	
@@ -198,13 +207,22 @@ def _get_ticket(caller, raw_string):
 	caller.ndb._menutree.tempticketnumber = inp
 
 	#check if player is ticket owner, if not then reject
-	if not caller == target.db.requestdict["reqauthor%s" % inp]:
-		caller.msg("That's not your ticket! Only wizards can see other player's tickets.")
+	try:
+		if not caller == target.db.requestdict["reqauthor%s" % inp]:
+			caller.msg("That's not your ticket! Only wizards can see other player's tickets.")
+			caller.ndb._menutree.valid == "No"
+			
+	except KeyError:
+		caller.msg("That's not a valid ticket number.")
+		caller.ndb._menutree.valid = "No"
 		return
+		
 	#if player is ticket owner, pull the info for it
 	if caller == target.db.requestdict["reqauthor%s" % inp]:
+		caller.ndb._menutree.valid = "Yes"
 		caller.ndb._menutree.title = (target.db.requestdict["reqtitle%s" % inp])
 		caller.ndb._menutree.body = (target.db.requestdict["reqtext%s" % inp])
+		caller.ndb._menutree.time = (target.db.requestdict["reqtime%s" % inp])
 		
 	
 #set the title
@@ -250,6 +268,7 @@ def _create_ticket(caller):
 		#set author to the submitter
 		(target.db.requestdict["reqauthor%i" % target.db.requestnum]) = caller
 		(target.db.requestdict["isclosed%i" % target.db.requestnum]) = 0
+		(target.db.requestdict["reqtime%i" % target.db.requestnum]) = strftime("%d %b %H:%M", gmtime())
 		#add the ticket number to the author's profile for viewing later
 		caller.db.requestsmade.append(target.db.requestnum)
 		caller.msg("Your ticket has been submitted as #%i" % target.db.requestnum)

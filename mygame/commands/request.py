@@ -25,7 +25,7 @@ class cmdRespond(default_cmds.MuxCommand):
 	"""
 	
 	key = "respond"
-	lock = "cmd: perm(Wizards)"
+	lock = "cmd:perm(Wizards)"
 	help_category = "general"
 	
 	def func(self):
