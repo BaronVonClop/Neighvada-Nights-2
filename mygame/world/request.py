@@ -297,4 +297,4 @@ def _close_ticket(caller):
 	caller.ndb._menutree.tempticketnumber = int(caller.ndb._menutree.tempticketnumber)
 	caller.db.requestsmade.remove(caller.ndb._menutree.tempticketnumber)
 	caller.db.requestsclosed.append(caller.ndb._menutree.tempticketnumber)
-	(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) += ("|/|/CLOSED BY %s" % caller)
+	(target.db.requestdict["reqtext%s" % caller.ndb._menutree.tempticketnumber]) += (("|/|/CLOSED BY %s" % caller) + (" ON %s" % strftime("%d %b %H:%M", gmtime())))
